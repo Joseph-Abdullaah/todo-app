@@ -10,12 +10,35 @@ import {
 } from "../services/todo.service.js";
 
 export async function getAllTodos(
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {
   try {
-    const todos = await getTodos();
+    type Status = "all" | "active" | "completed";
+    const rawStatus =
+      typeof req.query.status === "string" ? req.query.status : undefined;
+    const search =
+      typeof req.query.search === "string" ? req.query.search : undefined;
+
+    if (
+      rawStatus !== undefined &&
+      !["all", "active", "completed"].includes(rawStatus)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status. Use all, active, or completed.",
+      });
+    }
+
+    const status: Status =
+      rawStatus === "active"
+        ? "active"
+        : rawStatus === "completed"
+          ? "completed"
+          : "all";
+
+    const todos = await getTodos({ status, search });
     res.json({
       success: true,
       data: todos,
