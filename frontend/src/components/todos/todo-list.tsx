@@ -5,6 +5,7 @@ import type { Todo } from "@/types/todo"
 interface TodoListProps {
   todos: Todo[]
   hasAnyTodos: boolean
+  loading?: boolean
   onCreate: () => void
   onToggle: (id: string) => void
   onDelete: (id: string) => void
@@ -14,11 +15,25 @@ interface TodoListProps {
 export function TodoList({
   todos,
   hasAnyTodos,
+  loading,
   onCreate,
   onToggle,
   onDelete,
   onEdit,
 }: TodoListProps) {
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-2">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="h-[72px] animate-pulse rounded-lg bg-muted"
+          />
+        ))}
+      </div>
+    )
+  }
+
   if (todos.length === 0) {
     return <TodoEmpty hasAnyTodos={hasAnyTodos} onCreate={onCreate} />
   }
