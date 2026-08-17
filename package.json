@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "name": "todo-app",
+  "scripts": {
+    "dev": "concurrently \"pnpm --dir frontend dev\" \"pnpm --dir backend dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.4"
+  }
+}
